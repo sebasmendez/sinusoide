@@ -28,7 +28,7 @@ class pantallaResultado extends StatelessWidget {
                 style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
               ),
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                Text('L Rodete: $var1'),
+                Text('L Rodetee: $var1'),
                 Text('L acople: $var2'),
               ]),
               const SizedBox(
