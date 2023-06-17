@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'montajes.dart';
 import 'historial.dart';
 
 void main() {
-  // Inicializar databaseFactoryFfi antes de usar la base de datos
-  sqfliteFfiInit();
-  databaseFactory = databaseFactoryFfi;
-  
   runApp(const SinosoideApp());
 }
 
@@ -19,8 +14,8 @@ class SinosoideApp extends StatelessWidget {
     return MaterialApp(
       title: 'SinusoideApp',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          primarySwatch: Colors.blue,
+          scaffoldBackgroundColor: const Color.fromARGB(255, 191, 207, 228)),
       home: const NavBar(),
     );
   }
@@ -78,14 +73,29 @@ class NavBarState extends State<NavBar> {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Home Page',
-        style: TextStyle(fontSize: 24),
+    return Center(
+      child: Container(
+        width: 400,
+        height: 100,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromARGB(255, 48, 80, 184).withOpacity(0.7),
+              blurRadius: 10,
+              offset: const Offset(0, 20),
+            ),
+          ],
+        ),
+        child: Image.asset(
+          'imagenes/SINUSOIDE-1024.png',
+          fit: BoxFit.contain,
+        ),
       ),
     );
   }
