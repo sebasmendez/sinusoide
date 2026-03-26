@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:printing/printing.dart';
 import 'db_helper.dart';
+import 'pdf_service.dart';
 
 class HistorialPage extends StatefulWidget {
   const HistorialPage({super.key});
@@ -25,6 +27,16 @@ class _HistorialPageState extends State<HistorialPage> {
   Future<void> _eliminar(int id) async {
     await DbHelper.eliminarCalculo(id);
     await _cargar();
+  }
+
+  Future<void> _exportarPdf(Map<String, dynamic> item) async {
+    final pdfBytes = await generarPdfMontaje(item);
+    final equipo = item['equipo']?.toString().replaceAll(' ', '_') ?? 'montaje';
+    final rod = item['rodamiento']?.toString() ?? '';
+    await Printing.sharePdf(
+      bytes: pdfBytes,
+      filename: 'montaje_${equipo}_$rod.pdf',
+    );
   }
 
   String _fmt(dynamic v) {
@@ -63,9 +75,20 @@ class _HistorialPageState extends State<HistorialPage> {
                       'Rod. ${item['rodamiento'] ?? '-'}  ${item['clase'] ?? ''}  —  ${item['fecha'] ?? ''}',
                       style: const TextStyle(fontSize: 12),
                     ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete_outline, color: Colors.red),
-                      onPressed: () => _eliminar(item['id']),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.picture_as_pdf, color: Colors.blueGrey),
+                          onPressed: () => _exportarPdf(item),
+                          tooltip: 'Exportar PDF',
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete_outline, color: Colors.red),
+                          onPressed: () => _eliminar(item['id']),
+                          tooltip: 'Eliminar',
+                        ),
+                      ],
                     ),
                     children: [
                       Padding(

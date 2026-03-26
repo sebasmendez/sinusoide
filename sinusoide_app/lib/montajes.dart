@@ -26,18 +26,9 @@ class _MontajesPageState extends State<MontajesPage> {
   final _galgeoAcopleCtrl = TextEditingController();
   final _galgeoRodeteCtrl = TextEditingController();
 
-  String _clase  = 'NORMAL';
-  String _estado = 'BUENO';
+  String _clase = 'NORMAL';
 
-  static const _clases  = ['C2', 'NORMAL', 'C3', 'C4', 'C5'];
-  static const _estados = ['BUENO', 'REGULAR', 'ALERTA', 'PELIGRO'];
-
-  static const _estadoColores = {
-    'BUENO':   Colors.green,
-    'REGULAR': Colors.yellow,
-    'ALERTA':  Colors.orange,
-    'PELIGRO': Colors.red,
-  };
+  static const _clases = ['C2', 'NORMAL', 'C3', 'C4', 'C5'];
 
   @override
   void dispose() {
@@ -104,7 +95,6 @@ class _MontajesPageState extends State<MontajesPage> {
           tipo:         _tipoCtrl.text.trim(),
           rodamiento:   rodamiento,
           clase:        _clase,
-          estado:       _estado,
           galgeoAcople: galgeoAcople,
           galgeoRodete: galgeoRodete,
           resAcople:    resAcople,
@@ -170,34 +160,7 @@ class _MontajesPageState extends State<MontajesPage> {
           padding: const EdgeInsets.all(16),
           children: [
             _seccion('DATOS DEL EQUIPO'),
-            Row(
-              children: [
-                Expanded(child: _campo('Equipo', _equipoCtrl, obligatorio: true)),
-                const SizedBox(width: 8),
-                SizedBox(
-                  width: 140,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: DropdownButtonFormField<String>(
-                      value: _estado,
-                      decoration: InputDecoration(
-                        labelText: 'Estado',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                        isDense: true,
-                      ),
-                      items: _estados.map((e) => DropdownMenuItem(
-                        value: e,
-                        child: Text(e, style: TextStyle(
-                          color: _estadoColores[e],
-                          fontWeight: FontWeight.bold,
-                        )),
-                      )).toList(),
-                      onChanged: (v) => setState(() => _estado = v!),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            _campo('Equipo', _equipoCtrl, obligatorio: true),
             _campo('TAG', _tagCtrl),
             _campo('Eje', _ejeCtrl),
 

@@ -2,15 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:intl/intl.dart';
+import 'package:printing/printing.dart';
 import 'db_helper.dart';
 import 'logica.dart';
+import 'pdf_service.dart';
 
 class pantallaResultado extends StatefulWidget {
   final String equipo, tag, eje;
   final String cajaPortLA, torqueLA, cajaPortLR, torqueLR, paralelismo;
-  final String sellos, manguito, tipo, clase, estado;
+  final String sellos, manguito, tipo, clase;
   final int rodamiento;
   final double galgeoAcople, galgeoRodete;
   final ResultadoMontaje resAcople, resRodete;
@@ -30,7 +31,6 @@ class pantallaResultado extends StatefulWidget {
     required this.tipo,
     required this.rodamiento,
     required this.clase,
-    required this.estado,
     required this.galgeoAcople,
     required this.galgeoRodete,
     required this.resAcople,
@@ -49,13 +49,6 @@ class _pantallaResultadoState extends State<pantallaResultado> {
 
   String _fmt(double v) => v.toStringAsFixed(3);
 
-  static const _estadoColores = {
-    'BUENO':   Colors.green,
-    'REGULAR': Colors.yellow,
-    'ALERTA':  Colors.orange,
-    'PELIGRO': Colors.red,
-  };
-
   @override
   void initState() {
     super.initState();
@@ -67,6 +60,42 @@ class _pantallaResultadoState extends State<pantallaResultado> {
     _ajusteAcopleCtrl.dispose();
     _ajusteRodeteCtrl.dispose();
     super.dispose();
+  }
+
+  Map<String, dynamic> _buildDatos() {
+    final ra = widget.resAcople;
+    final rr = widget.resRodete;
+    final vA = double.tryParse(_ajusteAcopleCtrl.text.trim().replaceAll(',', '.'));
+    final vR = double.tryParse(_ajusteRodeteCtrl.text.trim().replaceAll(',', '.'));
+    return {
+      'fecha': DateFormat('dd/MM/yyyy').format(DateTime.now()),
+      'equipo': widget.equipo,
+      'tag': widget.tag,
+      'eje': widget.eje,
+      'cajaPortLA': widget.cajaPortLA,
+      'torqueLA': widget.torqueLA,
+      'cajaPortLR': widget.cajaPortLR,
+      'torqueLR': widget.torqueLR,
+      'paralelismo': widget.paralelismo,
+      'sellos': widget.sellos,
+      'manguito': widget.manguito,
+      'tipo': widget.tipo,
+      'rodamiento': widget.rodamiento,
+      'clase': widget.clase,
+      'diametro': ra.diametro,
+      'galgeoAcople': widget.galgeoAcople,
+      'galgeoRodete': widget.galgeoRodete,
+      'refMin': ra.refSinMontarMin,
+      'refMax': ra.refSinMontarMax,
+      'reducMin': ra.reduccionMin,
+      'reducMax': ra.reduccionMax,
+      'juegoMinAcople': ra.juegoMin,
+      'juegoMaxAcople': ra.juegoMax,
+      'juegoMinRodete': rr.juegoMin,
+      'juegoMaxRodete': rr.juegoMax,
+      'ajusteAcople': vA,
+      'ajusteRodete': vR,
+    };
   }
 
   Future<void> _guardar() async {
@@ -88,7 +117,7 @@ class _pantallaResultadoState extends State<pantallaResultado> {
       'tipo':               widget.tipo,
       'rodamiento':         widget.rodamiento,
       'clase':              widget.clase,
-      'estado':             widget.estado,
+      'estado':             '',
       'diametro':           ra.diametro,
       'galgeo_acople':      widget.galgeoAcople,
       'galgeo_rodete':      widget.galgeoRodete,
@@ -118,36 +147,13 @@ class _pantallaResultadoState extends State<pantallaResultado> {
     }
   }
 
-  void _exportar() {
-    final ra = widget.resAcople;
-    final rr = widget.resRodete;
-    final buf = StringBuffer();
-    buf.writeln('=== SINUSOIDE - Montaje de Rodamiento ===');
-    buf.writeln('Fecha: ${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now())}');
-    buf.writeln('');
-    buf.writeln('EQUIPO:      ${widget.equipo}');
-    buf.writeln('ESTADO:      ${widget.estado}');
-    if (widget.tag.isNotEmpty)        buf.writeln('TAG:         ${widget.tag}');
-    if (widget.eje.isNotEmpty)        buf.writeln('EJE:         ${widget.eje}');
-    if (widget.cajaPortLA.isNotEmpty) buf.writeln('CAJA PORT LA: ${widget.cajaPortLA}  TORQUE: ${widget.torqueLA}');
-    if (widget.cajaPortLR.isNotEmpty) buf.writeln('CAJA PORT LR: ${widget.cajaPortLR}  TORQUE: ${widget.torqueLR}');
-    if (widget.paralelismo.isNotEmpty) buf.writeln('PARALELISMO: ${widget.paralelismo}');
-    if (widget.sellos.isNotEmpty)     buf.writeln('SELLOS:      ${widget.sellos}');
-    if (widget.manguito.isNotEmpty)   buf.writeln('MANGUITO:    ${widget.manguito}');
-    if (widget.tipo.isNotEmpty)       buf.writeln('TIPO:        ${widget.tipo}');
-    buf.writeln('RODAMIENTO:  ${widget.rodamiento}  (clase ${widget.clase})');
-    buf.writeln('Diametro de eje: ${ra.diametro} mm');
-    buf.writeln('');
-    buf.writeln('--- RESULTADOS ---');
-    buf.writeln('                      LADO ACOPLE        LADO RODETE');
-    buf.writeln('Galgeo:               ${_fmt(widget.galgeoAcople)} mm         ${_fmt(widget.galgeoRodete)} mm');
-    buf.writeln('Ref. sin montar:      (${_fmt(ra.refSinMontarMin)}); (${_fmt(ra.refSinMontarMax)}) mm');
-    buf.writeln('Reduccion juego:      (${_fmt(ra.reduccionMin)}) a (${_fmt(ra.reduccionMax)}) mm');
-    buf.writeln('Calculo del juego:    (${_fmt(ra.juegoMin)} - ${_fmt(ra.juegoMax)}) mm   (${_fmt(rr.juegoMin)} - ${_fmt(rr.juegoMax)}) mm');
-    if (_ajusteAcopleCtrl.text.isNotEmpty || _ajusteRodeteCtrl.text.isNotEmpty) {
-      buf.writeln('Ajuste final:         (${_ajusteAcopleCtrl.text}) mm        (${_ajusteRodeteCtrl.text}) mm');
-    }
-    Share.share(buf.toString(), subject: 'Montaje ${widget.equipo} - Rod. ${widget.rodamiento}');
+  Future<void> _exportarPdf() async {
+    final datos = _buildDatos();
+    final pdfBytes = await generarPdfMontaje(datos);
+    await Printing.sharePdf(
+      bytes: pdfBytes,
+      filename: 'montaje_${widget.equipo.replaceAll(' ', '_')}_${widget.rodamiento}.pdf',
+    );
   }
 
   Widget _filaInfo(String label, String valor) => Padding(
@@ -174,7 +180,7 @@ class _pantallaResultadoState extends State<pantallaResultado> {
     final ra = widget.resAcople;
     final rr = widget.resRodete;
 
-    Widget celda(String texto, {bool bold = false, Color? color}) => Padding(
+    Widget celda(String texto, {bool bold = false}) => Padding(
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
       child: Text(
         texto,
@@ -182,7 +188,6 @@ class _pantallaResultadoState extends State<pantallaResultado> {
         style: TextStyle(
           fontSize: 11,
           fontWeight: bold ? FontWeight.bold : FontWeight.normal,
-          color: color,
         ),
       ),
     );
@@ -214,37 +219,31 @@ class _pantallaResultadoState extends State<pantallaResultado> {
         2: FlexColumnWidth(2),
       },
       children: [
-        // Header
         TableRow(children: [
           celdaHeader('UBICACION'),
           celdaHeader('SOPORTE\nLADO ACOPLE'),
           celdaHeader('SOPORTE\nLADO RODETE'),
         ]),
-        // Galgeo
         TableRow(children: [
           celdaLabel('GALGEO ANTES\nDEL MONTAJE'),
           celda('${_fmt(widget.galgeoAcople)} mm'),
           celda('${_fmt(widget.galgeoRodete)} mm'),
         ]),
-        // Referencia sin montar
         TableRow(children: [
           celdaLabel('REFERENCIA\nSIN MONTAR (1)'),
           celda('(${_fmt(ra.refSinMontarMin)}); (${_fmt(ra.refSinMontarMax)}) mm'),
           celda('(${_fmt(rr.refSinMontarMin)}); (${_fmt(rr.refSinMontarMax)}) mm'),
         ]),
-        // Reduccion
         TableRow(children: [
           celdaLabel('REDUCCION JUEGO\nRADIAL SKF (2)'),
           celda('(${_fmt(ra.reduccionMin)}) a (${_fmt(ra.reduccionMax)}) mm'),
           celda('(${_fmt(rr.reduccionMin)}) a (${_fmt(rr.reduccionMax)}) mm'),
         ]),
-        // Calculo del juego
         TableRow(children: [
           celdaLabel('CALCULO DEL\nJUEGO (3)'),
           celda('(${_fmt(ra.juegoMin)} - ${_fmt(ra.juegoMax)}) mm', bold: true),
           celda('(${_fmt(rr.juegoMin)} - ${_fmt(rr.juegoMax)}) mm', bold: true),
         ]),
-        // Ajuste final
         TableRow(children: [
           celdaLabel('AJUSTE FINAL (4)'),
           Padding(
@@ -301,21 +300,8 @@ class _pantallaResultadoState extends State<pantallaResultado> {
               ],
             ),
 
-          // Datos del equipo
           _seccion('DATOS DEL EQUIPO'),
-          Row(
-            children: [
-              Expanded(child: _filaInfo('Equipo', widget.equipo)),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(
-                  color: _estadoColores[widget.estado] ?? Colors.grey,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(widget.estado, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-              ),
-            ],
-          ),
+          _filaInfo('Equipo', widget.equipo),
           if (widget.tag.isNotEmpty)        _filaInfo('TAG', widget.tag),
           if (widget.eje.isNotEmpty)        _filaInfo('Eje', widget.eje),
           if (widget.cajaPortLA.isNotEmpty) _filaInfo('Caja Port LA', '${widget.cajaPortLA}  Torque: ${widget.torqueLA}'),
@@ -355,9 +341,9 @@ class _pantallaResultadoState extends State<pantallaResultado> {
                 label: const Text('Guardar'),
               ),
               ElevatedButton.icon(
-                onPressed: _exportar,
-                icon: const Icon(Icons.share),
-                label: const Text('Exportar'),
+                onPressed: _exportarPdf,
+                icon: const Icon(Icons.picture_as_pdf),
+                label: const Text('PDF'),
               ),
             ],
           ),

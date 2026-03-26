@@ -85,23 +85,51 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        width: 400,
-        height: 100,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Color.fromARGB(255, 48, 80, 184).withOpacity(0.7),
-              blurRadius: 10,
-              offset: const Offset(0, 20),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 300,
+              height: 80,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color.fromARGB(255, 48, 80, 184).withOpacity(0.4),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: Image.asset(
+                'imagenes/SINUSOIDE-1024.png',
+                fit: BoxFit.contain,
+              ),
+            ),
+            const SizedBox(height: 32),
+            const Text(
+              'MONTAJE DE\nRODAMIENTOS',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 55, 71, 79),
+                letterSpacing: 2,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Confiabilidad para equipos rotantes',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.blueGrey.shade400,
+                fontStyle: FontStyle.italic,
+              ),
             ),
           ],
-        ),
-        child: Image.asset(
-          'imagenes/SINUSOIDE-1024.png',
-          fit: BoxFit.contain,
         ),
       ),
     );
