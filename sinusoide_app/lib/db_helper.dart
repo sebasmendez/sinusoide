@@ -13,7 +13,7 @@ class DbHelper {
     final path = join(await getDatabasesPath(), 'sinusoide.db');
     return openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: _crear,
       onUpgrade: (db, oldVersion, newVersion) async {
         await db.execute('DROP TABLE IF EXISTS historial');
@@ -25,27 +25,35 @@ class DbHelper {
   static Future<void> _crear(Database db, int version) {
     return db.execute('''
       CREATE TABLE historial (
-        id           INTEGER PRIMARY KEY AUTOINCREMENT,
-        fecha        TEXT NOT NULL,
-        equipo       TEXT,
-        tag          TEXT,
-        eje          TEXT,
-        caja_port    TEXT,
-        sellos       TEXT,
-        manguito     TEXT,
-        tipo         TEXT,
-        rodamiento   INTEGER,
-        clase        TEXT,
-        ubicacion    TEXT,
-        galgeo       REAL,
-        diametro     INTEGER,
-        ref_min      REAL,
-        ref_max      REAL,
-        reduc_min    REAL,
-        reduc_max    REAL,
-        juego_min    REAL,
-        juego_max    REAL,
-        ajuste_final REAL
+        id               INTEGER PRIMARY KEY AUTOINCREMENT,
+        fecha            TEXT NOT NULL,
+        equipo           TEXT,
+        tag              TEXT,
+        eje              TEXT,
+        caja_port_la     TEXT,
+        torque_la        TEXT,
+        caja_port_lr     TEXT,
+        torque_lr        TEXT,
+        paralelismo      TEXT,
+        sellos           TEXT,
+        manguito         TEXT,
+        tipo             TEXT,
+        rodamiento       INTEGER,
+        clase            TEXT,
+        estado           TEXT,
+        diametro         INTEGER,
+        galgeo_acople    REAL,
+        galgeo_rodete    REAL,
+        ref_min          REAL,
+        ref_max          REAL,
+        reduc_min        REAL,
+        reduc_max        REAL,
+        juego_min_acople REAL,
+        juego_max_acople REAL,
+        juego_min_rodete REAL,
+        juego_max_rodete REAL,
+        ajuste_acople    REAL,
+        ajuste_rodete    REAL
       )
     ''');
   }
@@ -55,10 +63,12 @@ class DbHelper {
     return db.insert('historial', datos);
   }
 
-  static Future<void> actualizarAjusteFinal(int id, double valor) async {
+  static Future<void> actualizarAjustes(int id, double? acople, double? rodete) async {
     final db = await database;
-    await db.update('historial', {'ajuste_final': valor},
-        where: 'id = ?', whereArgs: [id]);
+    await db.update('historial', {
+      'ajuste_acople': acople,
+      'ajuste_rodete': rodete,
+    }, where: 'id = ?', whereArgs: [id]);
   }
 
   static Future<List<Map<String, dynamic>>> obtenerHistorial() async {

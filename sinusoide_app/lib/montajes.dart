@@ -11,47 +11,76 @@ class MontajesPage extends StatefulWidget {
 class _MontajesPageState extends State<MontajesPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final _equipoCtrl    = TextEditingController();
-  final _tagCtrl       = TextEditingController();
-  final _ejeCtrl       = TextEditingController();
-  final _cajaPortCtrl  = TextEditingController();
-  final _sellosCtrl    = TextEditingController();
-  final _manguitorCtrl = TextEditingController();
-  final _tipoCtrl      = TextEditingController();
-  final _rodCtrl       = TextEditingController();
-  final _galgeoCtrl    = TextEditingController();
+  final _equipoCtrl       = TextEditingController();
+  final _tagCtrl          = TextEditingController();
+  final _ejeCtrl          = TextEditingController();
+  final _cajaPortLACtrl   = TextEditingController();
+  final _torqueLACtrl     = TextEditingController();
+  final _cajaPortLRCtrl   = TextEditingController();
+  final _torqueLRCtrl     = TextEditingController();
+  final _paralelismoCtrl  = TextEditingController();
+  final _sellosCtrl       = TextEditingController();
+  final _manguitoCtrl     = TextEditingController();
+  final _tipoCtrl         = TextEditingController();
+  final _rodCtrl          = TextEditingController();
+  final _galgeoAcopleCtrl = TextEditingController();
+  final _galgeoRodeteCtrl = TextEditingController();
 
-  String _clase    = 'NORMAL';
-  String _ubicacion = 'Lado Rodete';
+  String _clase  = 'NORMAL';
+  String _estado = 'BUENO';
 
-  static const _clases    = ['C2', 'NORMAL', 'C3', 'C4', 'C5'];
-  static const _ubicaciones = ['Lado Rodete', 'Lado Acople'];
+  static const _clases  = ['C2', 'NORMAL', 'C3', 'C4', 'C5'];
+  static const _estados = ['BUENO', 'REGULAR', 'ALERTA', 'PELIGRO'];
+
+  static const _estadoColores = {
+    'BUENO':   Colors.green,
+    'REGULAR': Colors.yellow,
+    'ALERTA':  Colors.orange,
+    'PELIGRO': Colors.red,
+  };
 
   @override
   void dispose() {
-    for (final c in [_equipoCtrl, _tagCtrl, _ejeCtrl, _cajaPortCtrl,
-                     _sellosCtrl, _manguitorCtrl, _tipoCtrl, _rodCtrl, _galgeoCtrl]) {
+    for (final c in [
+      _equipoCtrl, _tagCtrl, _ejeCtrl,
+      _cajaPortLACtrl, _torqueLACtrl,
+      _cajaPortLRCtrl, _torqueLRCtrl,
+      _paralelismoCtrl, _sellosCtrl, _manguitoCtrl,
+      _tipoCtrl, _rodCtrl,
+      _galgeoAcopleCtrl, _galgeoRodeteCtrl,
+    ]) {
       c.dispose();
     }
     super.dispose();
+  }
+
+  double? _parseNum(String text) {
+    return double.tryParse(text.trim().replaceAll(',', '.'));
   }
 
   void _calcular() {
     if (!_formKey.currentState!.validate()) return;
 
     final int rodamiento = int.parse(_rodCtrl.text.trim());
-    final double galgeo  = double.parse(_galgeoCtrl.text.trim().replaceAll(',', '.'));
+    final double galgeoAcople = _parseNum(_galgeoAcopleCtrl.text)!;
+    final double galgeoRodete = _parseNum(_galgeoRodeteCtrl.text)!;
 
-    final resultado = calcularMontaje(
+    final resAcople = calcularMontaje(
       rodamiento: rodamiento,
       clase: _clase,
-      galgeo: galgeo,
+      galgeo: galgeoAcople,
     );
 
-    if (resultado == null) {
+    final resRodete = calcularMontaje(
+      rodamiento: rodamiento,
+      clase: _clase,
+      galgeo: galgeoRodete,
+    );
+
+    if (resAcople == null || resRodete == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('No se encontraron datos para ese rodamiento/clase. Verificá el número.'),
+          content: Text('No se encontraron datos para ese rodamiento/clase. Verifica el numero.'),
           backgroundColor: Colors.red,
         ),
       );
@@ -62,18 +91,24 @@ class _MontajesPageState extends State<MontajesPage> {
       context,
       MaterialPageRoute(
         builder: (_) => pantallaResultado(
-          equipo:    _equipoCtrl.text.trim(),
-          tag:       _tagCtrl.text.trim(),
-          eje:       _ejeCtrl.text.trim(),
-          cajaPort:  _cajaPortCtrl.text.trim(),
-          sellos:    _sellosCtrl.text.trim(),
-          manguito:  _manguitorCtrl.text.trim(),
-          tipo:      _tipoCtrl.text.trim(),
-          rodamiento: rodamiento,
-          clase:     _clase,
-          ubicacion: _ubicacion,
-          galgeo:    galgeo,
-          resultado: resultado,
+          equipo:       _equipoCtrl.text.trim(),
+          tag:          _tagCtrl.text.trim(),
+          eje:          _ejeCtrl.text.trim(),
+          cajaPortLA:   _cajaPortLACtrl.text.trim(),
+          torqueLA:     _torqueLACtrl.text.trim(),
+          cajaPortLR:   _cajaPortLRCtrl.text.trim(),
+          torqueLR:     _torqueLRCtrl.text.trim(),
+          paralelismo:  _paralelismoCtrl.text.trim(),
+          sellos:       _sellosCtrl.text.trim(),
+          manguito:     _manguitoCtrl.text.trim(),
+          tipo:         _tipoCtrl.text.trim(),
+          rodamiento:   rodamiento,
+          clase:        _clase,
+          estado:       _estado,
+          galgeoAcople: galgeoAcople,
+          galgeoRodete: galgeoRodete,
+          resAcople:    resAcople,
+          resRodete:    resRodete,
         ),
       ),
     );
@@ -103,6 +138,19 @@ class _MontajesPageState extends State<MontajesPage> {
     );
   }
 
+  Widget _campoGalgeo(String label, TextEditingController ctrl) {
+    return _campo(
+      label, ctrl,
+      teclado: const TextInputType.numberWithOptions(decimal: true),
+      obligatorio: true,
+      validator: (v) {
+        if (v == null || v.trim().isEmpty) return 'Campo requerido';
+        if (_parseNum(v) == null) return 'Ingresa un valor numerico';
+        return null;
+      },
+    );
+  }
+
   Widget _seccion(String titulo) => Padding(
     padding: const EdgeInsets.only(top: 16, bottom: 4),
     child: Text(titulo,
@@ -122,23 +170,66 @@ class _MontajesPageState extends State<MontajesPage> {
           padding: const EdgeInsets.all(16),
           children: [
             _seccion('DATOS DEL EQUIPO'),
-            _campo('Equipo', _equipoCtrl, obligatorio: true),
+            Row(
+              children: [
+                Expanded(child: _campo('Equipo', _equipoCtrl, obligatorio: true)),
+                const SizedBox(width: 8),
+                SizedBox(
+                  width: 140,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: DropdownButtonFormField<String>(
+                      value: _estado,
+                      decoration: InputDecoration(
+                        labelText: 'Estado',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                        isDense: true,
+                      ),
+                      items: _estados.map((e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(e, style: TextStyle(
+                          color: _estadoColores[e],
+                          fontWeight: FontWeight.bold,
+                        )),
+                      )).toList(),
+                      onChanged: (v) => setState(() => _estado = v!),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             _campo('TAG', _tagCtrl),
             _campo('Eje', _ejeCtrl),
-            _campo('Caja portarrodamiento', _cajaPortCtrl),
-            _campo('Sellos', _sellosCtrl),
-            _campo('Manguito', _manguitorCtrl),
+
+            _seccion('CAJAS PORTARRODAMIENTO'),
+            Row(
+              children: [
+                Expanded(child: _campo('Caja Port LA (Lado Acople)', _cajaPortLACtrl)),
+                const SizedBox(width: 8),
+                SizedBox(width: 100, child: _campo('Torque', _torqueLACtrl)),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(child: _campo('Caja Port LR (Lado Rodete)', _cajaPortLRCtrl)),
+                const SizedBox(width: 8),
+                SizedBox(width: 100, child: _campo('Torque', _torqueLRCtrl)),
+              ],
+            ),
+            _campo('Paralelismo entre cajas port', _paralelismoCtrl),
 
             _seccion('DATOS DEL RODAMIENTO'),
+            _campo('Sellos', _sellosCtrl),
+            _campo('Manguito', _manguitoCtrl),
             _campo('Tipo de rodamiento', _tipoCtrl),
-            _campo('Número de rodamiento', _rodCtrl,
+            _campo('Numero de rodamiento', _rodCtrl,
               teclado: TextInputType.number,
               formatos: [FilteringTextInputFormatter.digitsOnly],
               obligatorio: true,
               validator: (v) {
                 if (v == null || v.trim().isEmpty) return 'Campo requerido';
                 final n = int.tryParse(v.trim());
-                if (n == null || n <= 0) return 'Ingresá un número válido';
+                if (n == null || n <= 0) return 'Ingresa un numero valido';
                 return null;
               },
             ),
@@ -155,31 +246,10 @@ class _MontajesPageState extends State<MontajesPage> {
                 onChanged: (v) => setState(() => _clase = v!),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: DropdownButtonFormField<String>(
-                value: _ubicacion,
-                decoration: InputDecoration(
-                  labelText: 'Ubicación',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                  isDense: true,
-                ),
-                items: _ubicaciones.map((u) => DropdownMenuItem(value: u, child: Text(u))).toList(),
-                onChanged: (v) => setState(() => _ubicacion = v!),
-              ),
-            ),
 
-            _seccion('MEDICIÓN'),
-            _campo('Galgeo antes del montaje (mm)', _galgeoCtrl,
-              teclado: const TextInputType.numberWithOptions(decimal: true),
-              obligatorio: true,
-              validator: (v) {
-                if (v == null || v.trim().isEmpty) return 'Campo requerido';
-                final n = double.tryParse(v.trim().replaceAll(',', '.'));
-                if (n == null || n <= 0) return 'Ingresá un valor numérico positivo';
-                return null;
-              },
-            ),
+            _seccion('MEDICIONES (GALGEO ANTES DEL MONTAJE)'),
+            _campoGalgeo('Galgeo Lado Acople (mm)', _galgeoAcopleCtrl),
+            _campoGalgeo('Galgeo Lado Rodete (mm)', _galgeoRodeteCtrl),
 
             const SizedBox(height: 24),
             ElevatedButton.icon(

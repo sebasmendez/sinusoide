@@ -44,7 +44,7 @@ class _HistorialPageState extends State<HistorialPage> {
         ],
       ),
       body: _historial.isEmpty
-          ? const Center(child: Text('No hay cálculos guardados'))
+          ? const Center(child: Text('No hay calculos guardados'))
           : ListView.builder(
               itemCount: _historial.length,
               itemBuilder: (context, index) {
@@ -74,18 +74,27 @@ class _HistorialPageState extends State<HistorialPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Divider(),
-                            _linea('Diámetro de eje', '${item['diametro'] ?? '-'} mm'),
-                            _linea('Galgeo antes montaje', '${_fmt(item['galgeo'])} mm'),
-                            const SizedBox(height: 6),
+                            if (item['estado'] != null)
+                              _linea('Estado', item['estado']),
+                            _linea('Diametro de eje', '${item['diametro'] ?? '-'} mm'),
                             _linea('Ref. sin montar',
-                              'MIN ${_fmt(item['ref_min'])} / MAX ${_fmt(item['ref_max'])} mm'),
-                            _linea('Reducción de juego',
-                              'MIN ${_fmt(item['reduc_min'])} / MAX ${_fmt(item['reduc_max'])} mm'),
-                            _linea('Juego residual',
-                              'MIN ${_fmt(item['juego_min'])} / MAX ${_fmt(item['juego_max'])} mm'),
-                            if (item['ajuste_final'] != null)
-                              _linea('Ajuste final', '${_fmt(item['ajuste_final'])} mm',
-                                bold: true),
+                              '(${_fmt(item['ref_min'])}); (${_fmt(item['ref_max'])}) mm'),
+                            _linea('Reduccion de juego',
+                              '(${_fmt(item['reduc_min'])}) a (${_fmt(item['reduc_max'])}) mm'),
+                            const SizedBox(height: 6),
+                            const Text('LADO ACOPLE', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
+                            _linea('  Galgeo', '${_fmt(item['galgeo_acople'])} mm'),
+                            _linea('  Juego residual',
+                              '(${_fmt(item['juego_min_acople'])} - ${_fmt(item['juego_max_acople'])}) mm'),
+                            if (item['ajuste_acople'] != null)
+                              _linea('  Ajuste final', '(${_fmt(item['ajuste_acople'])}) mm', bold: true),
+                            const SizedBox(height: 4),
+                            const Text('LADO RODETE', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
+                            _linea('  Galgeo', '${_fmt(item['galgeo_rodete'])} mm'),
+                            _linea('  Juego residual',
+                              '(${_fmt(item['juego_min_rodete'])} - ${_fmt(item['juego_max_rodete'])}) mm'),
+                            if (item['ajuste_rodete'] != null)
+                              _linea('  Ajuste final', '(${_fmt(item['ajuste_rodete'])}) mm', bold: true),
                           ],
                         ),
                       ),
