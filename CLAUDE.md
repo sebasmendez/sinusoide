@@ -12,39 +12,59 @@ los valores correspondientes en tablas precargadas, mostrando los resultados.
 
 NO es una app de calculo: es una app de consulta/lookup en tablas.
 
-## Estado actual
+## Estado actual (v1.0.x)
 
-- Existe un frontend Flutter basico con navegacion de 3 pestanas (Home, Montajes, Historial)
-- La logica de negocio (busqueda en tablas) NO esta implementada
-- Los datos de las tablas aun no estan cargados
-- Se necesita recibir la planilla Excel con las tablas de doble entrada para definir
-  la estructura de datos
+- Frontend Flutter con navegacion de 3 pestanas (Home, Montajes, Historial)
+- Formulario de entrada con 6 campos: EQUIPO, CAJA PORT, SELLOS, MANGUITO, TIPO, RODAMIENTO
+- Pantalla de resultados muestra los valores ingresados
+- Historial persistido en SQLite (guarda automaticamente cada calculo)
+- Exportacion via share nativo del celular (WhatsApp, email, etc.)
+- Build compilado y probado en Android fisico
 
 ## Stack
 
-- Flutter (Dart >=3.0.3)
-- SQLite (sqflite) para persistencia local
-- Plataformas: Android, iOS, Web, Desktop
+- Flutter 3.41.5 / Dart >=3.0.3
+- SQLite (sqflite 2.4.2) para persistencia local
+- share_plus para exportacion nativa
+- intl para formato de fechas
+- Plataformas objetivo: Android (probado), iOS (pendiente infraestructura Apple)
 
 ## Estructura
 
 ```
 sinusoide/
   CLAUDE.md              # Este archivo
+  RELEASES.md            # Changelog de versiones
+  build_release.sh       # Script para compilar y versionar APK
+  releases/              # APKs generados (no se suben a git)
   sinusoide_app/         # Proyecto Flutter
     lib/
       main.dart          # Entry point, navegacion
       montajes.dart      # Formulario de entrada
-      calculo.dart       # Pantalla de resultados
-      historial.dart     # Historial de consultas
-    assets/              # Imagenes y datos
+      calculo.dart       # Pantalla de resultados (+ guardar + exportar)
+      historial.dart     # Historial desde SQLite (+ borrar entradas)
+      db_helper.dart     # Capa de acceso a SQLite
+    assets/
+      imagenes/          # Logo y recursos graficos
     pubspec.yaml         # Dependencias
+    android/             # Config Android (Gradle 8.9, AGP 8.7, Kotlin 2.1)
 ```
+
+## Versionado de APK
+
+Usar el script `build_release.sh` para generar cada nueva version:
+```bash
+./build_release.sh          # incrementa build number y compila
+./build_release.sh minor    # sube version minor (1.0 -> 1.1)
+./build_release.sh major    # sube version major (1.x -> 2.0)
+```
+Los APKs quedan en `releases/sinusoide-vX.Y.Z+N.apk`. Se conservan los ultimos 5.
 
 ## Pendiente
 
 - [ ] Recibir planilla Excel con tablas de doble entrada
 - [ ] Definir estructura de datos a partir de las tablas
-- [ ] Repensar la app como herramienta de consulta (no de calculo)
-- [ ] Implementar logica de busqueda/lookup
-- [ ] Persistencia de historial en SQLite
+- [ ] Implementar logica de busqueda/lookup en las tablas
+- [ ] Reemplazar campos de texto libre por selectores basados en las tablas
+- [ ] Mostrar valores calculados reales en pantalla de resultados
+- [ ] iOS: configurar build en Codemagic o Mac

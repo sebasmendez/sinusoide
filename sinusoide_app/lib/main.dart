@@ -31,16 +31,23 @@ class NavBar extends StatefulWidget {
 class NavBarState extends State<NavBar> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
-    const HomePage(),
-    MontajesPage(),
-    HistorialPage(),
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  Widget _buildPage(int index) {
+    switch (index) {
+      case 0:
+        return const HomePage();
+      case 1:
+        return MontajesPage();
+      case 2:
+        return const HistorialPage();
+      default:
+        return const HomePage();
+    }
   }
 
   @override
@@ -49,7 +56,7 @@ class NavBarState extends State<NavBar> {
       appBar: AppBar(
         title: const Text('SinusoideApp'),
       ),
-      body: _pages[_selectedIndex],
+      body: _buildPage(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
