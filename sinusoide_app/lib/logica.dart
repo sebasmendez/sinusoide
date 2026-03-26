@@ -75,11 +75,11 @@ ResultadoMontaje? calcularMontaje({
   final double reducMin = fila2[2];
   final double reducMax = fila2[3];
 
-  // Juego residual
-  // juego_min = galgeo - refSinMontarMin (piso: clearance inicial en el minimo de referencia)
-  // juego_max = galgeo - reduccionMax    (techo: maxima reduccion aplicada)
-  final double juegoMin = galgeo - refMin;
-  final double juegoMax = galgeo - reducMax;
+  // Juego residual = galgeo - reduccion
+  // juego_min = galgeo - reduccion_max (peor caso: maxima reduccion)
+  // juego_max = galgeo - reduccion_min (mejor caso: minima reduccion)
+  final double juegoMin = galgeo - reducMax;
+  final double juegoMax = galgeo - reducMin;
 
   return ResultadoMontaje(
     diametro: diametro,
