@@ -1,7 +1,37 @@
-const String appVersion = '1.2.0';
-const String appBuild = '2';
+const String appVersion = '1.3.0';
+const String appBuild = '1';
 
 final Map<String, dynamic> changelogData = {
+  'v1.3.0': {
+    'title': 'Medidor de vibraciones con VU meter',
+    'date': '2026-03-27',
+    'changes': [
+      {
+        'category': 'FEAT',
+        'text': 'Nueva pestaña "Vibración" para medición objetiva de nivel de audio (dBFS) en tiempo real. Captura la señal del sensor de vibraciones conectado al jack de audio (3.5mm), USB o Bluetooth.'
+      },
+      {
+        'category': 'UI',
+        'text': 'VU Meter visual con barra horizontal y escala de colores: verde (-60 a -18 dBFS), amarillo (-18 a -6 dBFS), rojo (-6 a 0 dBFS). Valor numérico grande (64px) mostrando dBFS actual.'
+      },
+      {
+        'category': 'UI',
+        'text': 'Indicador de pico: máximo detectado desde el inicio de la medición. Estadísticas: mínimo, promedio, máximo desde que se inició.'
+      },
+      {
+        'category': 'PERMS',
+        'text': 'Permisos de micrófono: Android (RECORD_AUDIO) + iOS (NSMicrophoneUsageDescription) con solicitud en tiempo de ejecución.'
+      },
+      {
+        'category': 'DEPS',
+        'text': 'Packages nuevos: noise_meter ^5.1.0 (captura de niveles dB) + permission_handler ^12.0.0 (gestión de permisos).'
+      },
+      {
+        'category': 'NAV',
+        'text': '4ta pestaña en BottomNavigationBar: Home, Montajes, Historial, Vibración (ícono de ecualizador). Navegación extendida con type: fixed.'
+      },
+    ]
+  },
   'v1.2.0': {
     'title': 'Mejoras UX para ambiente industrial',
     'date': '2026-03-26',
