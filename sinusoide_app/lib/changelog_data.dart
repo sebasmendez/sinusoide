@@ -23,6 +23,14 @@ final Map<String, dynamic> changelogData = {
         'text': 'Límite de 10 registros en historial: guardarCalculo() ahora mantiene solo los últimos 10 cálculos. El 11º registro automáticamente sobrescribe el más viejo.'
       },
       {
+        'category': 'UI',
+        'text': 'Vumetro: barra indicadora ahora se mueve suavemente con animación de 80ms. Arreglado FractionallySizedBox dentro de Align para mejor rendering. BorderRadius dinámico.'
+      },
+      {
+        'category': 'UI',
+        'text': 'Corrección de nombre: \"VUÓMETRO\" → \"VUMETRO\" (sin acento en la ó) en botón de Home y changelog.'
+      },
+      {
         'category': 'REMOVED',
         'text': 'Completamente removido: BottomNavigationBar, NavBar StatefulWidget, callbacks de navegación por tabs. Redundancia eliminada.'
       },
