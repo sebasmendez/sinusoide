@@ -117,6 +117,44 @@ Verificado contra informe real:
 
 ## Versionado de APK (Semantic Versioning)
 
+### Criterios de versionado: MAJOR.MINOR.PATCH+BUILD
+
+**MAJOR (1.x.x)** — Breaking Changes
+- Cambios que rompen compatibilidad o redesign fundamental
+- Ejemplo: v1.x → v2.0.0 (nueva arquitectura completa)
+
+**MINOR (1.x.0)** — Nuevas características importantes
+- Funcionalidades nuevas que son backward-compatible
+- Ejemplos:
+  - v1.2.0 → v1.3.0 (agregamos Vumetro — nueva característica)
+  - v1.3.0 → v1.4.0 (agregaríamos dark mode — nueva feature)
+
+**PATCH (1.3.x)** — Bug fixes + mejoras menores
+- Correcciones de bugs
+- Ajustes visuales
+- Cambios internos sin impacto en UX
+- Nuevos campos en formularios (mejora de entrada de datos)
+- Ejemplos:
+  - v1.3.0 → v1.3.1 (barra animada Vumetro, nombre corregido)
+  - v1.2.0 → v1.2.1 (campos de diámetro del eje)
+
+**BUILD NUMBER (+N)** — Sin cambios de código
+- Recompilaciones sin modificaciones
+- Auto-incrementado por `./build_release.sh`
+- Ejemplo: v1.3.1+1 → v1.3.1+2 → v1.3.1+3
+
+### Matriz de decisión rápida
+
+| Cambio | Tipo | Criterio |
+|--------|------|----------|
+| Nueva pantalla/feature completa | MINOR | Funcionalidad nueva importante |
+| Nuevo sensor/medidor | MINOR | Feature completa e independiente |
+| Nuevo campo en formulario | PATCH | Mejora de entrada, no feature nueva |
+| Fix de bug visual | PATCH | Corrección de rendering |
+| Barra animada/cosmética | PATCH | Mejora de UX, no funcionalidad |
+| Corrección de nombre/texto | PATCH | Ajuste menor |
+| Recompilación sin cambios | +N | Build number |
+
 **FLUJO OBLIGATORIO para cada versión:**
 
 1. **Editar CHANGELOG.md PRIMERO** con todos los cambios de la versión
@@ -170,5 +208,5 @@ Verificado contra informe real:
 - [ ] Posible: agregar calado axial y angulo de apriete a resultados/PDF
 
 ### Branches activas
-- `master` — v1.2.0 (producción)
-- `feature/vibracion-vu-meter` — v1.3.1 (desarrollo, en testing)
+- `master` — v1.2.1 (producción) — con campos de diámetro del eje
+- `feature/vibracion-vu-meter` — v1.3.1 (desarrollo, en testing) — Home dashboard + Vumetro
