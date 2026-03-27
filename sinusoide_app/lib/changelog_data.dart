@@ -12,7 +12,7 @@ final Map<String, dynamic> changelogData = {
       },
       {
         'category': 'NAV',
-        'text': 'Eliminado BottomNavigationBar y navegación por tabs. Nuevo layout: botón \"NUEVO CÁLCULO\" (full width 56px naranja) + Row con \"HISTORIAL\" (verde) y \"VUÓMETRO\" (azul) 50% ancho cada uno. Navegación con Navigator.push.'
+        'text': 'Eliminado BottomNavigationBar y navegación por tabs. Nuevo layout: botón \"NUEVO CÁLCULO\" (full width 56px naranja) + Row con \"HISTORIAL\" (verde) y \"VUMETRO\" (azul) 50% ancho cada uno. Navegación con Navigator.push.'
       },
       {
         'category': 'NAV',

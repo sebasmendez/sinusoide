@@ -12,13 +12,23 @@ Rediseño Home como Dashboard hub + Límite historial 10 registros
 - **[NAV] Estructura sin BottomNav:**
   - Botón "NUEVO CÁLCULO" (naranja, full width 56px) → Montajes
   - Botón "HISTORIAL" (verde, 50% ancho 56px) → Historial
-  - Botón "VUÓMETRO" (azul, 50% ancho 56px) → Vibración
+  - Botón "VUMETRO" (azul, 50% ancho 56px) → Vibración
   - Cada pantalla secundaria tiene AppBar propio con botón "atrás" automático
 
 - **[DB] Límite de 10 registros en historial:**
   - `guardarCalculo()` ahora mantiene solo los últimos 10 cálculos
   - El 11º registro automáticamente sobrescribe el más viejo
   - Implementado en `db_helper.dart` con limpieza automática en cada insert
+
+- **[UI] Vumetro improvements:**
+  - Barra indicadora ahora se mueve suavemente con animación de 80ms
+  - Arreglado: `FractionallySizedBox` dentro de `Align` para mejor rendering
+  - Agregada curva de animación lineal para mejor feedback visual
+  - BorderRadius dinámico: redondea esquinas derechas solo cuando está casi lleno (≥99%)
+
+- **[UI] Corrección de nombre:**
+  - Cambiado "VUÓMETRO" → "VUMETRO" (sin acento en la ó)
+  - Actualizado en botón de Home y changelog
 
 - **[REMOVED] Eliminado redundancia:**
   - BottomNavigationBar completamente removido

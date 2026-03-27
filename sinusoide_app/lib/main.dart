@@ -254,7 +254,7 @@ class HomePage extends StatelessWidget {
                               MaterialPageRoute(builder: (_) => const VibracionPage()),
                             ),
                             icon: const Icon(Icons.graphic_eq),
-                            label: const Text('VUÓMETRO'),
+                            label: const Text('VUMETRO'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue.shade700,
                               foregroundColor: Colors.white,

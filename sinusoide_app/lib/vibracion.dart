@@ -118,13 +118,23 @@ class _VibracionPageState extends State<VibracionPage> {
           child: Stack(
             children: [
               // Barra de relleno
-              FractionallySizedBox(
-                widthFactor: fraccion,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 80),
-                  decoration: BoxDecoration(
-                    color: _colorBarra(fraccion),
-                    borderRadius: BorderRadius.circular(8),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: FractionallySizedBox(
+                  widthFactor: fraccion,
+                  heightFactor: 1.0,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 80),
+                    curve: Curves.linear,
+                    decoration: BoxDecoration(
+                      color: _colorBarra(fraccion),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        bottomLeft: Radius.circular(8),
+                        topRight: fraccion >= 0.99 ? const Radius.circular(8) : Radius.zero,
+                        bottomRight: fraccion >= 0.99 ? const Radius.circular(8) : Radius.zero,
+                      ),
+                    ),
                   ),
                 ),
               ),
