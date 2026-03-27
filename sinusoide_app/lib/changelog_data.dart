@@ -31,6 +31,18 @@ final Map<String, dynamic> changelogData = {
         'text': 'Corrección de nombre: \"VUÓMETRO\" → \"VUMETRO\" (sin acento en la ó) en botón de Home y changelog.'
       },
       {
+        'category': 'FORM',
+        'text': 'Dos campos nuevos en DATOS DEL RODAMIENTO: Diámetro Lado Acople + Diámetro Lado Rodete (mm). Ubicados entre Clase de juego y Galgeos.'
+      },
+      {
+        'category': 'FEAT',
+        'text': 'Soporte para rodamientos diferentes en cada lado. Cada lado puede tener diámetro distinto, permitiendo equipos con configuraciones asimétricas.'
+      },
+      {
+        'category': 'LOGIC',
+        'text': 'Cambio en calcularMontaje(): ahora acepta diámetro como parámetro en lugar de calcularlo automáticamente desde el rodamiento.'
+      },
+      {
         'category': 'REMOVED',
         'text': 'Completamente removido: BottomNavigationBar, NavBar StatefulWidget, callbacks de navegación por tabs. Redundancia eliminada.'
       },

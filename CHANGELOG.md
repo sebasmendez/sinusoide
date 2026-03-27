@@ -30,6 +30,12 @@ Rediseño Home como Dashboard hub + Límite historial 10 registros
   - Cambiado "VUÓMETRO" → "VUMETRO" (sin acento en la ó)
   - Actualizado en botón de Home y changelog
 
+- **[FORM] Campos de diámetro del eje:**
+  - Dos campos nuevos: Diámetro Lado Acople (mm) + Diámetro Lado Rodete (mm)
+  - Ubicados en sección "DATOS DEL RODAMIENTO" entre clase de juego y galgeos
+  - Permite rodamientos diferentes en cada lado (configuraciones asimétricas)
+  - Modificado `calcularMontaje()`: ahora acepta diámetro como parámetro
+
 - **[REMOVED] Eliminado redundancia:**
   - BottomNavigationBar completamente removido
   - NavBar StatefulWidget removido
