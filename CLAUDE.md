@@ -99,14 +99,43 @@ Verificado contra informe real:
 - Rod. 22217, NORMAL, galgeo Acople 0.09 -> juego (0.040 - 0.050) OK
 - Rod. 22217, NORMAL, galgeo Rodete 0.08 -> juego (0.030 - 0.040) OK
 
-## Versionado de APK
+## Versionado de APK (Semantic Versioning)
 
-Usar el script `build_release.sh` para generar cada nueva version:
-```bash
-./build_release.sh          # incrementa build number y compila
-./build_release.sh minor    # sube version minor (1.0 -> 1.1)
-./build_release.sh major    # sube version major (1.x -> 2.0)
-```
+**FLUJO OBLIGATORIO para cada versión:**
+
+1. **Editar CHANGELOG.md PRIMERO** con todos los cambios de la versión
+   - Agregar sección `## vX.Y.Z` con título descriptivo
+   - Listar todos los cambios categorizados ([UI], [NAV], [DB], etc.)
+   - Ejemplo: cambios en main.dart, vibracion.dart, etc. VAN en CHANGELOG.md ANTES de compilar
+
+2. **Editar changelog_data.dart** si hay cambios de UI que el usuario debe ver
+   - Actualizar `appVersion` al nuevo número
+   - Agregar entrada en `changelogData` con los cambios
+
+3. **Hacer commit con los cambios a CHANGELOG.md**
+   ```bash
+   git add CHANGELOG.md changelog_data.dart
+   git commit -m "vX.Y.Z - Descripción de cambios"
+   ```
+
+4. **Compilar APK**
+   ```bash
+   ./build_release.sh          # incrementa build number automáticamente
+   ```
+   - El `pubspec.yaml` **automáticamente** actualiza version: X.Y.Z+N
+
+5. **Hacer commit final de la compilación**
+   ```bash
+   git add pubspec.yaml
+   git commit -m "Build: vX.Y.Z+N compilada"
+   ```
+
+**Resultado:** Una versión vX.Y.Z tiene UNA sola APK compilada (vX.Y.Z+N), que corresponde EXACTAMENTE con las notas en CHANGELOG.md vX.Y.Z.
+
+**NO hacer:**
+- ❌ Compilar varias APKs con el mismo número de versión (v1.3.1+2, v1.3.1+3)
+- ❌ Cambiar código sin actualizar CHANGELOG.md primero
+- ❌ Olvidar sincronizar CHANGELOG.md con changelog_data.dart
 
 ## Pendiente
 
