@@ -27,20 +27,36 @@ NO es una app de calculo: es una app de consulta/lookup en tablas.
 8. El usuario ingresa el ajuste final medido post-montaje
 9. Se puede exportar como PDF profesional
 
-## Estado actual (v1.2.x)
+## Estado actual (v1.3.1)
 
-- Frontend Flutter optimizado para ambiente industrial (tecnico con guantes en campo)
-- Navegacion de 3 pestanas: Home con logo + acceso directo a nuevo calculo,
-  Montajes (formulario), Historial (registros persistidos)
-- Formulario dividido en secciones visuales (Card gris para datos del equipo,
-  Card azul para parametros criticos: rodamiento, clase de juego, galgeos)
-- Clase de juego con SegmentedButton (5 opciones visibles, 1 tap, area tactil grande)
-- Boton "Calcular" full-width 56px color naranja para ambiente con guantes
-- Pantalla de resultados con tabla clara (fuentes 13px), ajuste final en seccion separada
-- Exportacion a PDF profesional con botones de accion jerarquizados
-  (PDF destacado en verde, Guardar outlined, Volver como link)
-- Historial persistido en SQLite con exportacion PDF por registro
-- Build compilado y probado en Android fisico
+### Producción (master)
+- **v1.2.0** — Mejoras UX para ambiente industrial
+  - Frontend Flutter optimizado para ambiente industrial (tecnico con guantes en campo)
+  - Navegacion con BottomNavigationBar: Home, Montajes, Historial
+  - Formulario dividido en secciones visuales (Card gris/azul)
+  - Clase de juego con SegmentedButton (5 opciones visibles)
+  - Boton "Calcular" full-width 56px color naranja
+  - Pantalla de resultados con tabla clara
+  - Exportacion a PDF profesional
+  - Historial persistido en SQLite
+  - Build compilado y probado en Android fisico
+
+### En desarrollo (feature/vibracion-vu-meter)
+- **v1.3.1** — Rediseño Home como Dashboard hub + Vumetro + Límite historial 10 registros
+  - ✅ Home rediseñada como dashboard (sin BottomNav redundante)
+    - 3 botones principales: NUEVO CÁLCULO (naranja), HISTORIAL (verde), VUMETRO (azul)
+    - Logo empresa prominente + Changelog modal
+  - ✅ Medidor de vibraciones (Vumetro) con VU meter visual
+    - Barra horizontal con animación suave (80ms)
+    - Escala de colores: verde → amarillo → rojo
+    - Estadísticas: mínimo, promedio, máximo, pico
+    - Captura señal de sensor vía jack de audio (3.5mm) o USB/Bluetooth
+  - ✅ Límite de 10 registros en historial (el 11º sobrescribe el más viejo)
+  - ✅ Navegación con Navigator.push (botón atrás automático)
+  - 🔄 **EN FASE DE PRUEBA:** Pendiente adaptador USB-C para validar Vumetro en equipo real
+  - Rama: `feature/vibracion-vu-meter` (sincronizada en GitHub)
+  - APK: `sinusoide-v1.3.1+3.apk` (disponible para testing)
+  - Web: `http://192.168.88.245:9000` (versión de desarrollo local)
 
 ## Stack
 
@@ -137,10 +153,22 @@ Verificado contra informe real:
 - ❌ Cambiar código sin actualizar CHANGELOG.md primero
 - ❌ Olvidar sincronizar CHANGELOG.md con changelog_data.dart
 
-## Pendiente
+## Roadmap y Estado
 
-- [ ] Probar app en dispositivo Android fisico (instalacion APK, flujos completos)
-- [ ] iOS: configurar build en Xcode
+### v1.3.1 — EN FASE DE PRUEBA (feature/vibracion-vu-meter)
+- [ ] Comprar adaptador USB-C para conectar sensor de vibraciones
+- [ ] Validar Vumetro con equipo real (Android)
+- [ ] Confirmar funcionamiento de barra animada en condiciones reales
+- [ ] Testing completo de flujos en ambiente industrial
+- **Cuando esté validado:** Crear PR y mergear a master para producción
+
+### v1.4.0 — Próximas mejoras (planificadas)
+- [ ] iOS: configurar build en Xcode + testing
 - [ ] Darkmode: para ambiente con poca luz en campo
 - [ ] Vibracion haptica en errores de validacion
+- [ ] Mejoras de UX: splash screen, animaciones de transición
 - [ ] Posible: agregar calado axial y angulo de apriete a resultados/PDF
+
+### Branches activas
+- `master` — v1.2.0 (producción)
+- `feature/vibracion-vu-meter` — v1.3.1 (desarrollo, en testing)
