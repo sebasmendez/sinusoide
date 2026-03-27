@@ -28,11 +28,10 @@ int calcularDiametro(int rodamiento) {
 
 // Retorna null si el diametro o la clase no estan en las tablas
 ResultadoMontaje? calcularMontaje({
-  required int rodamiento,
+  required int diametro,
   required String clase,
   required double galgeo,
 }) {
-  final int diametro = calcularDiametro(rodamiento);
 
   // Lookup Tabla 1
   List<dynamic>? fila1;

@@ -21,10 +21,12 @@ class _MontajesPageState extends State<MontajesPage> {
   final _paralelismoCtrl  = TextEditingController();
   final _sellosCtrl       = TextEditingController();
   final _manguitoCtrl     = TextEditingController();
-  final _tipoCtrl         = TextEditingController();
-  final _rodCtrl          = TextEditingController();
-  final _galgeoAcopleCtrl = TextEditingController();
-  final _galgeoRodeteCtrl = TextEditingController();
+  final _tipoCtrl           = TextEditingController();
+  final _rodCtrl            = TextEditingController();
+  final _diametroAcopleCtrl = TextEditingController();
+  final _diametroRodeteCtrl = TextEditingController();
+  final _galgeoAcopleCtrl   = TextEditingController();
+  final _galgeoRodeteCtrl   = TextEditingController();
 
   String _clase = 'NORMAL';
 
@@ -38,6 +40,7 @@ class _MontajesPageState extends State<MontajesPage> {
       _cajaPortLRCtrl, _torqueLRCtrl,
       _paralelismoCtrl, _sellosCtrl, _manguitoCtrl,
       _tipoCtrl, _rodCtrl,
+      _diametroAcopleCtrl, _diametroRodeteCtrl,
       _galgeoAcopleCtrl, _galgeoRodeteCtrl,
     ]) {
       c.dispose();
@@ -53,17 +56,19 @@ class _MontajesPageState extends State<MontajesPage> {
     if (!_formKey.currentState!.validate()) return;
 
     final int rodamiento = int.parse(_rodCtrl.text.trim());
+    final int diametroAcople = int.parse(_diametroAcopleCtrl.text.trim());
+    final int diametroRodete = int.parse(_diametroRodeteCtrl.text.trim());
     final double galgeoAcople = _parseNum(_galgeoAcopleCtrl.text)!;
     final double galgeoRodete = _parseNum(_galgeoRodeteCtrl.text)!;
 
     final resAcople = calcularMontaje(
-      rodamiento: rodamiento,
+      diametro: diametroAcople,
       clase: _clase,
       galgeo: galgeoAcople,
     );
 
     final resRodete = calcularMontaje(
-      rodamiento: rodamiento,
+      diametro: diametroRodete,
       clase: _clase,
       galgeo: galgeoRodete,
     );
@@ -244,6 +249,35 @@ class _MontajesPageState extends State<MontajesPage> {
                           ),
                         ],
                       ),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _campo('Diámetro Acople (mm)', _diametroAcopleCtrl,
+                            teclado: TextInputType.number,
+                            formatos: [FilteringTextInputFormatter.digitsOnly],
+                            obligatorio: true,
+                            validator: (v) {
+                              if (v == null || v.trim().isEmpty) return 'Campo requerido';
+                              if (int.tryParse(v.trim()) == null) return 'Número inválido';
+                              return null;
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: _campo('Diámetro Rodete (mm)', _diametroRodeteCtrl,
+                            teclado: TextInputType.number,
+                            formatos: [FilteringTextInputFormatter.digitsOnly],
+                            obligatorio: true,
+                            validator: (v) {
+                              if (v == null || v.trim().isEmpty) return 'Campo requerido';
+                              if (int.tryParse(v.trim()) == null) return 'Número inválido';
+                              return null;
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                     _campoGalgeo('Galgeo Lado Acople (mm)', _galgeoAcopleCtrl),
                     _campoGalgeo('Galgeo Lado Rodete (mm)', _galgeoRodeteCtrl),
