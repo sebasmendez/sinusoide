@@ -27,16 +27,19 @@ NO es una app de calculo: es una app de consulta/lookup en tablas.
 8. El usuario ingresa el ajuste final medido post-montaje
 9. Se puede exportar como PDF profesional
 
-## Estado actual (v1.1.x)
+## Estado actual (v1.2.x)
 
-- Frontend Flutter con navegacion de 3 pestanas (Home, Montajes, Historial)
-- Home con logo Sinusoide y titulo "MONTAJE DE RODAMIENTOS"
-- Formulario con datos del equipo, cajas port LA/LR con torque, paralelismo,
-  sellos, manguito, tipo, rodamiento, clase de juego, y dos galgeos (Acople/Rodete)
-- Pantalla de resultados con tabla de dos columnas (Acople / Rodete)
-- Exportacion a PDF profesional (tabla igual al informe real)
+- Frontend Flutter optimizado para ambiente industrial (tecnico con guantes en campo)
+- Navegacion de 3 pestanas: Home con logo + acceso directo a nuevo calculo,
+  Montajes (formulario), Historial (registros persistidos)
+- Formulario dividido en secciones visuales (Card gris para datos del equipo,
+  Card azul para parametros criticos: rodamiento, clase de juego, galgeos)
+- Clase de juego con SegmentedButton (5 opciones visibles, 1 tap, area tactil grande)
+- Boton "Calcular" full-width 56px color naranja para ambiente con guantes
+- Pantalla de resultados con tabla clara (fuentes 13px), ajuste final en seccion separada
+- Exportacion a PDF profesional con botones de accion jerarquizados
+  (PDF destacado en verde, Guardar outlined, Volver como link)
 - Historial persistido en SQLite con exportacion PDF por registro
-- Ajuste final editable por lado, guardado en base de datos
 - Build compilado y probado en Android fisico
 
 ## Stack
@@ -107,6 +110,8 @@ Usar el script `build_release.sh` para generar cada nueva version:
 
 ## Pendiente
 
-- [ ] Probar exportacion PDF en dispositivo fisico
-- [ ] iOS: configurar build
+- [ ] Probar app en dispositivo Android fisico (instalacion APK, flujos completos)
+- [ ] iOS: configurar build en Xcode
+- [ ] Darkmode: para ambiente con poca luz en campo
+- [ ] Vibracion haptica en errores de validacion
 - [ ] Posible: agregar calado axial y angulo de apriete a resultados/PDF

@@ -186,7 +186,7 @@ class _pantallaResultadoState extends State<pantallaResultado> {
         texto,
         textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 11,
+          fontSize: 13,
           fontWeight: bold ? FontWeight.bold : FontWeight.normal,
         ),
       ),
@@ -198,7 +198,7 @@ class _pantallaResultadoState extends State<pantallaResultado> {
       child: Text(
         texto,
         textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
       ),
     );
 
@@ -207,7 +207,7 @@ class _pantallaResultadoState extends State<pantallaResultado> {
       color: Colors.grey.shade200,
       child: Text(
         texto,
-        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
       ),
     );
 
@@ -243,41 +243,6 @@ class _pantallaResultadoState extends State<pantallaResultado> {
           celdaLabel('CALCULO DEL\nJUEGO (3)'),
           celda('(${_fmt(ra.juegoMin)} - ${_fmt(ra.juegoMax)}) mm', bold: true),
           celda('(${_fmt(rr.juegoMin)} - ${_fmt(rr.juegoMax)}) mm', bold: true),
-        ]),
-        TableRow(children: [
-          celdaLabel('AJUSTE FINAL (4)'),
-          Padding(
-            padding: const EdgeInsets.all(4),
-            child: TextFormField(
-              controller: _ajusteAcopleCtrl,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              decoration: const InputDecoration(
-                hintText: 'mm',
-                isDense: true,
-                contentPadding: EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-                border: InputBorder.none,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(4),
-            child: TextFormField(
-              controller: _ajusteRodeteCtrl,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              decoration: const InputDecoration(
-                hintText: 'mm',
-                isDense: true,
-                contentPadding: EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-                border: InputBorder.none,
-              ),
-            ),
-          ),
         ]),
       ],
     );
@@ -321,31 +286,100 @@ class _pantallaResultadoState extends State<pantallaResultado> {
             'REFERENCIAS:\n'
             '(1) Referencia del juego para el rodamiento sin montar segun manual SKF.\n'
             '(2) Reduccion del juego radial para montaje de acuerdo a manual SKF.\n'
-            '(3) Calculo del juego residual para lograr el ajuste del montaje correcto.\n'
-            '(4) Ajuste final de los rodamientos montados.',
+            '(3) Calculo del juego residual para lograr el ajuste del montaje correcto.',
             style: TextStyle(fontSize: 10, color: Colors.grey),
           ),
 
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.arrow_back),
-                label: const Text('Volver'),
+          const SizedBox(height: 20),
+          _seccion('AJUSTE FINAL MEDIDO (4)'),
+          Card(
+            elevation: 2,
+            color: Colors.amber.shade50,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Lado Acople (mm)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.blueGrey)),
+                        const SizedBox(height: 4),
+                        TextFormField(
+                          controller: _ajusteAcopleCtrl,
+                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                          inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                          decoration: InputDecoration(
+                            hintText: 'ej: 0.100',
+                            isDense: true,
+                            contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Lado Rodete (mm)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.blueGrey)),
+                        const SizedBox(height: 4),
+                        TextFormField(
+                          controller: _ajusteRodeteCtrl,
+                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                          inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                          decoration: InputDecoration(
+                            hintText: 'ej: 0.090',
+                            isDense: true,
+                            contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              ElevatedButton.icon(
-                onPressed: _guardarAjustes,
-                icon: const Icon(Icons.save),
-                label: const Text('Guardar'),
+            ),
+          ),
+
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            height: 56,
+            child: ElevatedButton.icon(
+              onPressed: _exportarPdf,
+              icon: const Icon(Icons.picture_as_pdf),
+              label: const Text('Exportar PDF'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green.shade700,
               ),
-              ElevatedButton.icon(
-                onPressed: _exportarPdf,
-                icon: const Icon(Icons.picture_as_pdf),
-                label: const Text('PDF'),
-              ),
-            ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: OutlinedButton.icon(
+              onPressed: _guardarAjustes,
+              icon: const Icon(Icons.save),
+              label: const Text('Guardar ajustes'),
+            ),
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            child: TextButton.icon(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.arrow_back),
+              label: const Text('Volver'),
+            ),
           ),
           const SizedBox(height: 16),
         ],

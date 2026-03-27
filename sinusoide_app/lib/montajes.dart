@@ -160,67 +160,126 @@ class _MontajesPageState extends State<MontajesPage> {
           padding: const EdgeInsets.all(16),
           children: [
             _seccion('DATOS DEL EQUIPO'),
-            _campo('Equipo', _equipoCtrl, obligatorio: true),
-            _campo('TAG', _tagCtrl),
-            _campo('Eje', _ejeCtrl),
-
-            _seccion('CAJAS PORTARRODAMIENTO'),
-            Row(
-              children: [
-                Expanded(child: _campo('Caja Port LA (Lado Acople)', _cajaPortLACtrl)),
-                const SizedBox(width: 8),
-                SizedBox(width: 100, child: _campo('Torque', _torqueLACtrl)),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(child: _campo('Caja Port LR (Lado Rodete)', _cajaPortLRCtrl)),
-                const SizedBox(width: 8),
-                SizedBox(width: 100, child: _campo('Torque', _torqueLRCtrl)),
-              ],
-            ),
-            _campo('Paralelismo entre cajas port', _paralelismoCtrl),
-
-            _seccion('DATOS DEL RODAMIENTO'),
-            _campo('Sellos', _sellosCtrl),
-            _campo('Manguito', _manguitoCtrl),
-            _campo('Tipo de rodamiento', _tipoCtrl),
-            _campo('Numero de rodamiento', _rodCtrl,
-              teclado: TextInputType.number,
-              formatos: [FilteringTextInputFormatter.digitsOnly],
-              obligatorio: true,
-              validator: (v) {
-                if (v == null || v.trim().isEmpty) return 'Campo requerido';
-                final n = int.tryParse(v.trim());
-                if (n == null || n <= 0) return 'Ingresa un numero valido';
-                return null;
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: DropdownButtonFormField<String>(
-                value: _clase,
-                decoration: InputDecoration(
-                  labelText: 'Clase de juego *',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                  isDense: true,
+            Card(
+              elevation: 1,
+              color: Colors.grey.shade100,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  children: [
+                    _campo('Equipo', _equipoCtrl, obligatorio: true),
+                    _campo('TAG', _tagCtrl),
+                    _campo('Eje', _ejeCtrl),
+                  ],
                 ),
-                items: _clases.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
-                onChanged: (v) => setState(() => _clase = v!),
               ),
             ),
 
-            _seccion('MEDICIONES (GALGEO ANTES DEL MONTAJE)'),
-            _campoGalgeo('Galgeo Lado Acople (mm)', _galgeoAcopleCtrl),
-            _campoGalgeo('Galgeo Lado Rodete (mm)', _galgeoRodeteCtrl),
+            _seccion('CAJAS PORTARRODAMIENTO'),
+            Card(
+              elevation: 1,
+              color: Colors.grey.shade100,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(child: _campo('Caja Port LA (Lado Acople)', _cajaPortLACtrl)),
+                        const SizedBox(width: 8),
+                        SizedBox(width: 100, child: _campo('Torque', _torqueLACtrl)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(child: _campo('Caja Port LR (Lado Rodete)', _cajaPortLRCtrl)),
+                        const SizedBox(width: 8),
+                        SizedBox(width: 100, child: _campo('Torque', _torqueLRCtrl)),
+                      ],
+                    ),
+                    _campo('Paralelismo entre cajas port', _paralelismoCtrl),
+                  ],
+                ),
+              ),
+            ),
+
+            _seccion('DATOS DEL RODAMIENTO Y MEDICIONES'),
+            Card(
+              elevation: 3,
+              color: Colors.blue.shade50,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+                side: const BorderSide(color: Colors.blue, width: 1.5),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _campo('Numero de rodamiento', _rodCtrl,
+                      teclado: TextInputType.number,
+                      formatos: [FilteringTextInputFormatter.digitsOnly],
+                      obligatorio: true,
+                      validator: (v) {
+                        if (v == null || v.trim().isEmpty) return 'Campo requerido';
+                        final n = int.tryParse(v.trim());
+                        if (n == null || n <= 0) return 'Ingresa un numero valido';
+                        return null;
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Clase de juego *', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.blueGrey)),
+                          const SizedBox(height: 8),
+                          SegmentedButton<String>(
+                            segments: _clases.map((c) => ButtonSegment(label: Text(c), value: c)).toList(),
+                            selected: {_clase},
+                            onSelectionChanged: (v) => setState(() => _clase = v.first),
+                            style: ButtonStyle(
+                              padding: WidgetStateProperty.all(const EdgeInsets.symmetric(vertical: 10, horizontal: 12)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    _campoGalgeo('Galgeo Lado Acople (mm)', _galgeoAcopleCtrl),
+                    _campoGalgeo('Galgeo Lado Rodete (mm)', _galgeoRodeteCtrl),
+                  ],
+                ),
+              ),
+            ),
+
+            _seccion('DATOS OPCIONALES DEL EQUIPO'),
+            Card(
+              elevation: 1,
+              color: Colors.grey.shade100,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  children: [
+                    _campo('Sellos', _sellosCtrl),
+                    _campo('Manguito', _manguitoCtrl),
+                    _campo('Tipo de rodamiento', _tipoCtrl),
+                  ],
+                ),
+              ),
+            ),
 
             const SizedBox(height: 24),
-            ElevatedButton.icon(
-              onPressed: _calcular,
-              icon: const Icon(Icons.calculate),
-              label: const Text('Calcular'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 14),
+            SizedBox(
+              width: double.infinity,
+              height: 56,
+              child: ElevatedButton.icon(
+                onPressed: _calcular,
+                icon: const Icon(Icons.calculate),
+                label: const Text('Calcular'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange.shade700,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
               ),
             ),
           ],

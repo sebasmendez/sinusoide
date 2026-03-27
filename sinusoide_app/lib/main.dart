@@ -37,16 +37,20 @@ class NavBarState extends State<NavBar> {
     });
   }
 
+  void _nuevoCalculo() {
+    _onItemTapped(1);
+  }
+
   Widget _buildPage(int index) {
     switch (index) {
       case 0:
-        return const HomePage();
+        return HomePage(onNuevoCalculo: _nuevoCalculo);
       case 1:
         return MontajesPage();
       case 2:
         return const HistorialPage();
       default:
-        return const HomePage();
+        return HomePage(onNuevoCalculo: _nuevoCalculo);
     }
   }
 
@@ -80,7 +84,12 @@ class NavBarState extends State<NavBar> {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key});
+  final VoidCallback onNuevoCalculo;
+
+  const HomePage({Key? key, required this.onNuevoCalculo});
+
+  static const double _logoRadius = 20;
+  static const Color _shadowColor = Color.fromARGB(102, 48, 80, 184);
 
   @override
   Widget build(BuildContext context) {
@@ -91,22 +100,23 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 300,
-              height: 80,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
+                borderRadius: BorderRadius.circular(_logoRadius),
+                boxShadow: const [
                   BoxShadow(
-                    color: const Color.fromARGB(255, 48, 80, 184).withOpacity(0.4),
+                    color: _shadowColor,
                     blurRadius: 12,
-                    offset: const Offset(0, 6),
+                    offset: Offset(0, 6),
                   ),
                 ],
               ),
-              child: Image.asset(
-                'imagenes/SINUSOIDE-1024.png',
-                fit: BoxFit.contain,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(_logoRadius),
+                child: Image.asset(
+                  'imagenes/SINUSOIDE-1024.png',
+                  width: 300,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
             const SizedBox(height: 32),
@@ -120,13 +130,23 @@ class HomePage extends StatelessWidget {
                 letterSpacing: 2,
               ),
             ),
-            const SizedBox(height: 12),
-            Text(
-              'Confiabilidad para equipos rotantes',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.blueGrey.shade400,
-                fontStyle: FontStyle.italic,
+            const SizedBox(height: 32),
+            SizedBox(
+              width: double.infinity,
+              height: 56,
+              child: ElevatedButton(
+                onPressed: onNuevoCalculo,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange.shade700,
+                ),
+                child: const Text(
+                  'NUEVO CÁLCULO',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
           ],
