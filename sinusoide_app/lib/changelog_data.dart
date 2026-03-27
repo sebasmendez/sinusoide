@@ -1,7 +1,33 @@
-const String appVersion = '1.3.0';
+const String appVersion = '1.3.1';
 const String appBuild = '1';
 
 final Map<String, dynamic> changelogData = {
+  'v1.3.1': {
+    'title': 'Rediseño Home como Dashboard hub + Límite historial 10 registros',
+    'date': '2026-03-27',
+    'changes': [
+      {
+        'category': 'UI',
+        'text': 'Home rediseñada como dashboard hub que reemplaza completamente el BottomNavigationBar redundante. Logo prominente + Título + 3 botones de acción grande.'
+      },
+      {
+        'category': 'NAV',
+        'text': 'Eliminado BottomNavigationBar y navegación por tabs. Nuevo layout: botón \"NUEVO CÁLCULO\" (full width 56px naranja) + Row con \"HISTORIAL\" (verde) y \"VUÓMETRO\" (azul) 50% ancho cada uno. Navegación con Navigator.push.'
+      },
+      {
+        'category': 'NAV',
+        'text': 'Cada pantalla secundaria tiene AppBar propio con botón \"atrás\" automático. Home es ahora la pantalla raíz (root).'
+      },
+      {
+        'category': 'DB',
+        'text': 'Límite de 10 registros en historial: guardarCalculo() ahora mantiene solo los últimos 10 cálculos. El 11º registro automáticamente sobrescribe el más viejo.'
+      },
+      {
+        'category': 'REMOVED',
+        'text': 'Completamente removido: BottomNavigationBar, NavBar StatefulWidget, callbacks de navegación por tabs. Redundancia eliminada.'
+      },
+    ]
+  },
   'v1.3.0': {
     'title': 'Medidor de vibraciones con VU meter',
     'date': '2026-03-27',

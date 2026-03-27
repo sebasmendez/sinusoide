@@ -60,7 +60,19 @@ class DbHelper {
 
   static Future<int> guardarCalculo(Map<String, dynamic> datos) async {
     final db = await database;
-    return db.insert('historial', datos);
+    final id = await db.insert('historial', datos);
+
+    // Mantener solo los últimos 10 registros
+    final count = Sqflite.firstIntValue(
+      await db.rawQuery('SELECT COUNT(*) FROM historial')
+    ) ?? 0;
+    if (count > 10) {
+      await db.rawDelete(
+        'DELETE FROM historial WHERE id = (SELECT MIN(id) FROM historial)'
+      );
+    }
+
+    return id;
   }
 
   static Future<void> actualizarAjustes(int id, double? acople, double? rodete) async {

@@ -1,5 +1,33 @@
 # Changelog - SinusoideApp
 
+## v1.3.1
+Rediseño Home como Dashboard hub + Límite historial 10 registros
+
+- **[UI] Home rediseñada:** Dashboard hub que reemplaza completamente el BottomNavigationBar redundante.
+  - Eliminado: `NavBar` y navegación por tabs
+  - Home es la pantalla raíz con 3 botones grandes para acceder a funciones
+  - Logo empresa prominente + Título + 3 botones de acción
+  - Navegación con `Navigator.push` → botón "atrás" automático en pantallas secundarias
+
+- **[NAV] Estructura sin BottomNav:**
+  - Botón "NUEVO CÁLCULO" (naranja, full width 56px) → Montajes
+  - Botón "HISTORIAL" (verde, 50% ancho 56px) → Historial
+  - Botón "VUÓMETRO" (azul, 50% ancho 56px) → Vibración
+  - Cada pantalla secundaria tiene AppBar propio con botón "atrás" automático
+
+- **[DB] Límite de 10 registros en historial:**
+  - `guardarCalculo()` ahora mantiene solo los últimos 10 cálculos
+  - El 11º registro automáticamente sobrescribe el más viejo
+  - Implementado en `db_helper.dart` con limpieza automática en cada insert
+
+- **[REMOVED] Eliminado redundancia:**
+  - BottomNavigationBar completamente removido
+  - NavBar StatefulWidget removido
+  - Callbacks de navegación por tabs removidos
+  - Home es ahora StatelessWidget simple
+
+**Beneficios:** Home tiene sentido como hub real, elimina redundancia de navegación, interfaz más limpia y moderna. Marketing visible con logo prominente.
+
 ## v1.3.0
 Medidor de vibraciones con VU meter
 

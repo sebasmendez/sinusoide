@@ -18,84 +18,13 @@ class SinosoideApp extends StatelessWidget {
       theme: ThemeData(
           primarySwatch: Colors.blue,
           scaffoldBackgroundColor: const Color.fromARGB(255, 191, 207, 228)),
-      home: const NavBar(),
-    );
-  }
-}
-
-class NavBar extends StatefulWidget {
-  const NavBar({super.key});
-
-  @override
-  NavBarState createState() => NavBarState();
-}
-
-class NavBarState extends State<NavBar> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  void _nuevoCalculo() {
-    _onItemTapped(1);
-  }
-
-  Widget _buildPage(int index) {
-    switch (index) {
-      case 0:
-        return HomePage(onNuevoCalculo: _nuevoCalculo);
-      case 1:
-        return MontajesPage();
-      case 2:
-        return const HistorialPage();
-      case 3:
-        return const VibracionPage();
-      default:
-        return HomePage(onNuevoCalculo: _nuevoCalculo);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('SinusoideApp'),
-      ),
-      body: _buildPage(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.adjust_sharp),
-            label: 'Montajes',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'Historial',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.graphic_eq),
-            label: 'Vibración',
-          ),
-        ],
-      ),
+      home: const HomePage(),
     );
   }
 }
 
 class HomePage extends StatelessWidget {
-  final VoidCallback onNuevoCalculo;
-
-  const HomePage({Key? key, required this.onNuevoCalculo});
+  const HomePage({Key? key});
 
   static const double _logoRadius = 20;
   static const Color _shadowColor = Color.fromARGB(102, 48, 80, 184);
@@ -224,75 +153,136 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(_logoRadius),
-                boxShadow: const [
-                  BoxShadow(
-                    color: _shadowColor,
-                    blurRadius: 12,
-                    offset: Offset(0, 6),
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Logo
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(_logoRadius),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: _shadowColor,
+                          blurRadius: 12,
+                          offset: Offset(0, 6),
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(_logoRadius),
+                      child: Image.asset(
+                        'imagenes/SINUSOIDE-1024.png',
+                        width: 280,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  // Título
+                  const Text(
+                    'MONTAJE DE\nRODAMIENTOS',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 55, 71, 79),
+                      letterSpacing: 2,
+                    ),
+                  ),
+
+                  const SizedBox(height: 40),
+
+                  // Botón NUEVO CÁLCULO
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton.icon(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => MontajesPage()),
+                      ),
+                      icon: const Icon(Icons.calculate),
+                      label: const Text('NUEVO CÁLCULO'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange.shade700,
+                        foregroundColor: Colors.white,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  // Row: HISTORIAL + VUÓMETRO
+                  Row(
+                    children: [
+                      // HISTORIAL
+                      Expanded(
+                        child: SizedBox(
+                          height: 56,
+                          child: ElevatedButton.icon(
+                            onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const HistorialPage()),
+                            ),
+                            icon: const Icon(Icons.history),
+                            label: const Text('HISTORIAL'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green.shade700,
+                              foregroundColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(width: 12),
+
+                      // VUÓMETRO
+                      Expanded(
+                        child: SizedBox(
+                          height: 56,
+                          child: ElevatedButton.icon(
+                            onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const VibracionPage()),
+                            ),
+                            icon: const Icon(Icons.graphic_eq),
+                            label: const Text('VUÓMETRO'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue.shade700,
+                              foregroundColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 60),
+
+                  // Changelog link
+                  GestureDetector(
+                    onTap: () => _mostrarChangelog(context),
+                    child: Text(
+                      'v$appVersion — Tap para ver cambios',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.blueGrey.shade400,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
                   ),
                 ],
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(_logoRadius),
-                child: Image.asset(
-                  'imagenes/SINUSOIDE-1024.png',
-                  width: 300,
-                  fit: BoxFit.contain,
-                ),
-              ),
             ),
-            const SizedBox(height: 32),
-            const Text(
-              'MONTAJE DE\nRODAMIENTOS',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 55, 71, 79),
-                letterSpacing: 2,
-              ),
-            ),
-            const SizedBox(height: 32),
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                onPressed: onNuevoCalculo,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange.shade700,
-                ),
-                child: const Text(
-                  'NUEVO CÁLCULO',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 32),
-            GestureDetector(
-              onTap: () => _mostrarChangelog(context),
-              child: Text(
-                'v$appVersion — Tap para ver cambios',
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Colors.blueGrey.shade400,
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
