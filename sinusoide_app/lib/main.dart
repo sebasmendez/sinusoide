@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'montajes.dart';
 import 'historial.dart';
+import 'vibracion.dart';
 import 'changelog_data.dart';
 
 void main() {
@@ -50,6 +51,8 @@ class NavBarState extends State<NavBar> {
         return MontajesPage();
       case 2:
         return const HistorialPage();
+      case 3:
+        return const VibracionPage();
       default:
         return HomePage(onNuevoCalculo: _nuevoCalculo);
     }
@@ -65,6 +68,7 @@ class NavBarState extends State<NavBar> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+        type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -77,6 +81,10 @@ class NavBarState extends State<NavBar> {
           BottomNavigationBarItem(
             icon: Icon(Icons.history),
             label: 'Historial',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.graphic_eq),
+            label: 'Vibración',
           ),
         ],
       ),

@@ -1,5 +1,38 @@
 # Changelog - SinusoideApp
 
+## v1.3.0
+Medidor de vibraciones con VU meter
+
+- **[FEAT] Nueva pestaña "Vibración":** medidor de nivel de audio en tiempo real (dBFS)
+  - Captura la señal del sensor de vibraciones conectado al jack de audio (3.5mm) o vía USB/Bluetooth
+  - Stream en vivo de amplitud desde el micrófono del dispositivo
+
+- **[UI] VU Meter visual:**
+  - Barra horizontal con gradiente de colores: verde (-60 a -18 dBFS) → amarillo (-18 a -6 dBFS) → rojo (-6 a 0 dBFS)
+  - Valor numérico grande (64px) mostrando dBFS actual
+  - Indicador de pico (máximo detectado desde el inicio)
+  - Estadísticas: mínimo, promedio, máximo desde que se inició la medición
+
+- **[UI] Controles:**
+  - Botón "Iniciar/Detener" 56px full width (verde al detener, rojo al medir)
+  - Card instructiva: "Conectá el sensor al jack de audio antes de iniciar"
+  - Indicador de estado (punto verde si está capturando)
+
+- **[PERMS] Permisos de micrófono:**
+  - Android: `RECORD_AUDIO` en `AndroidManifest.xml`
+  - iOS: `NSMicrophoneUsageDescription` en `Info.plist`
+  - Solicitud en tiempo de ejecución via `permission_handler`
+
+- **[DEPS] Packages nuevos:**
+  - `noise_meter: ^5.1.0` — captura de niveles dB en tiempo real
+  - `permission_handler: ^12.0.0` — gestión de permisos de micrófono en Android/iOS
+
+- **[NAV] Nuevo item en BottomNavigationBar:**
+  - 4ta pestaña "Vibración" con ícono `Icons.graphic_eq`
+  - Navegación extendida a 4 opciones (Home, Montajes, Historial, Vibración)
+
+**Caso de uso:** El técnico conecta un sensor de vibraciones (acelerómetro/velocímetro) al jack de audio del celular. En lugar de escuchar subjetivamente la amplitud (dependiendo del oído, ruido ambiente, calidad del auricular), ve la medición objetiva en dBFS. Permite comparar niveles entre diferentes ejes de rotores y detectar anomalías de vibración.
+
 ## v1.2.0
 Mejoras UX para ambiente industrial
 
