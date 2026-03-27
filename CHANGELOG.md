@@ -1,5 +1,26 @@
 # Changelog - SinusoideApp
 
+## v1.2.1
+Campos de diámetro del eje (Acople y Rodete)
+
+- **[FORM] Campos de diámetro del eje:** dos nuevos campos en sección "DATOS DEL RODAMIENTO"
+  - Diámetro Lado Acople (mm)
+  - Diámetro Lado Rodete (mm)
+  - Ubicados entre "Clase de juego" y "Galgeos"
+  - Validación: números positivos obligatorios
+
+- **[FEAT] Soporte para rodamientos diferentes en cada lado:**
+  - Cada lado puede tener diámetro distinto
+  - Permite equipos con configuraciones asimétricas
+  - Cálculos independientes por lado
+
+- **[LOGIC] Cambio en función calcularMontaje():**
+  - Anterior: `calcularMontaje(rodamiento, clase, galgeo)` — calculaba diámetro automáticamente
+  - Nuevo: `calcularMontaje(diametro, clase, galgeo)` — acepta diámetro como parámetro
+  - El usuario ingresa explícitamente el diámetro en lugar de derivarlo del rodamiento
+
+- **[UX] Interfaz:** Layout con dos columnas lado a lado, área táctil amplia para ambiente con guantes.
+
 ## v1.2.0
 Mejoras UX para ambiente industrial
 

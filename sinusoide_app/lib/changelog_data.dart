@@ -1,7 +1,29 @@
-const String appVersion = '1.2.0';
-const String appBuild = '2';
+const String appVersion = '1.2.1';
+const String appBuild = '1';
 
 final Map<String, dynamic> changelogData = {
+  'v1.2.1': {
+    'title': 'Campos de diámetro del eje (Acople y Rodete)',
+    'date': '2026-03-27',
+    'changes': [
+      {
+        'category': 'FORM',
+        'text': 'Dos campos nuevos en sección DATOS DEL RODAMIENTO: Diámetro Lado Acople (mm) + Diámetro Lado Rodete (mm). Ubicados entre Clase de juego y Galgeos.'
+      },
+      {
+        'category': 'FEAT',
+        'text': 'Soporte para rodamientos diferentes en cada lado. Cada lado puede tener diámetro distinto, permitiendo equipos con configuraciones asimétricas.'
+      },
+      {
+        'category': 'LOGIC',
+        'text': 'Cambio en calcularMontaje(): ahora acepta diámetro como parámetro en lugar de calcularlo automáticamente desde el rodamiento.'
+      },
+      {
+        'category': 'UX',
+        'text': 'Layout con dos columnas lado a lado, área táctil amplia para ambiente con guantes en campo.'
+      },
+    ]
+  },
   'v1.2.0': {
     'title': 'Mejoras UX para ambiente industrial',
     'date': '2026-03-26',
