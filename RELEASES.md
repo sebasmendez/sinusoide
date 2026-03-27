@@ -1,46 +1,28 @@
-# Changelog - SinusoideApp
+# Releases - SinusoideApp
 
-## v1.2.0 (2026-03-26)
+Ver **[CHANGELOG.md](CHANGELOG.md)** para historial detallado de cambios por versión.
 
-### Mejoras UX para ambiente industrial
-- **Clase de juego**: reemplazar dropdown por botones segmentados (SegmentedButton) — más rápido y área táctil más grande para guantes
-- **Botón Calcular**: ahora full width con altura 56px y color naranja destacado
-- **Jerarquía visual**: campos críticos (rodamiento, clase de juego, galgeos) en Card azul con borde resaltado; datos opcionales en Card gris
-- **Tamaño de fuentes**: aumentar fontSize en tabla de resultados de 11px → 13px (mejor legibilidad en campo)
-- **Ajuste final**: sacado de la tabla → sección independiente con campos claros para Lado Acople y Lado Rodete
-- **Botones de acción**: reordenados por importancia — PDF full width verde destacado, Guardar outlined secundario, Volver como TextButton
-- **Home**: agregado botón "NUEVO CÁLCULO" para acceso directo al formulario sin navegar manualmente
+## Versiones disponibles
 
----
+| Versión | Fecha | Archivo APK | Estado |
+|---------|-------|------------|--------|
+| v1.2.0+2 | 2026-03-26 | `sinusoide-v1.2.0+2.apk` (55.5 MB) | ✅ Compilado |
+| v1.1.0+7 | 2026-03-25 | `sinusoide-v1.1.0+7.apk` | ✅ Compilado |
+| v1.0.1 | 2026-03-25 | — | ✅ Compilado |
+| v1.0.0 | 2026-03-25 | — | ✅ Compilado |
 
-## v1.1.0 (2026-03-25)
+## Compilar nueva versión
 
-### Tablas de datos SKF + PDF profesional
-- **Tablas de doble entrada**: Tabla 1 (juego radial interno SKF sin montar), Tabla 2 (reducción del juego radial)
-- **Cálculo real**: implementada lógica de búsqueda en tablas + cálculo del juego residual (juego_min/max = galgeo - reduccion)
-- **Exportación PDF profesional**: genera informe con tabla de dos columnas (Lado Acople / Lado Rodete), datos del equipo, referencias
-- **Ajuste final editable**: campos para ingresa el ajuste medido post-montaje, guardados en base de datos
-- **Base de datos v3**: esquema actualizado para soportar dos lados (Acople/Rodete) con juego y ajuste por lado
+```bash
+./build_release.sh                # incrementa build number
+./build_release.sh minor          # sube version minor (1.2 → 1.3)
+./build_release.sh major          # sube version major (1.x → 2.0)
+```
 
-Verificado contra informes reales (Rod. 22217 NORMAL, galgeo 0.09 → juego 0.040-0.050 ✓)
+Los APKs se guardan en `releases/` (últimos 5 conservados).
 
----
+## Links útiles
 
-## v1.0.1 (2026-03-25)
-
-### Persistencia + Historial
-- Historial persistido en SQLite (guarda automáticamente cada cálculo)
-- Exportación via share nativo del celular (WhatsApp, email, Gmail, etc.)
-- Pantalla de resultados muestra todos los datos reales ingresados
-- Se puede borrar entradas del historial con confirmación
-- Visualización expandible del historial con detalles de cada cálculo
-
----
-
-## v1.0.0 (2026-03-25)
-
-### Primera versión compilada y funcional
-- Navegación de 3 pestañas: Home (logo Sinusoide), Montajes (formulario), Historial (registros)
-- Formulario con 6 campos iniciales: Equipo, TAG, Eje, Rodamiento, Clase de juego, Galgeos
-- Pantalla de resultados básica (tabla simple)
-- Compilado y probado en Android físico (APK v1.0.0+2)
+- **CHANGELOG.md** — historial detallado de cambios
+- **CLAUDE.md** — descripción del proyecto, arquitectura, estructura de archivos
+- **pubspec.yaml** — dependencias y versión actual
